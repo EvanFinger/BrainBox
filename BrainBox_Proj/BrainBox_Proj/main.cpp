@@ -8,9 +8,8 @@ void change_color(WORD color_id);
 int main()
 {
 	init_lib();
-	
-	std::cout << "\033[36m";
-	
+	MainMenu menu;
+	menu.print();
 
 
 }
