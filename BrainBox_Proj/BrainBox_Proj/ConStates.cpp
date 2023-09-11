@@ -9,7 +9,6 @@ MainMenu::MainMenu()
 		std::vector<std::string>
 		{
 			"Welcome to the Grade Manager!",
-				this->con_text.color["BLUE"] + 
 			"  Select an existing file, or create a new one..."
 		}
 	);
