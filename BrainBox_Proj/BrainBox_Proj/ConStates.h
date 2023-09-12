@@ -1,11 +1,8 @@
 #ifndef CON_STATE_H
 #define CON_STATE_H
 
-#include <iostream>
-#include <Windows.h>
-#include <vector>
-#include <tuple>
-#include <map> 
+#include "FileMan.h"
+
 
 enum alignment
 {

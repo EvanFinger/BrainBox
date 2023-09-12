@@ -21,9 +21,15 @@
     <ClCompile Include="ConStates.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileMan.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConStates.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileMan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
