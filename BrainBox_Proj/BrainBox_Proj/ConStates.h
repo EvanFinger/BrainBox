@@ -99,9 +99,8 @@ struct box_struct
 		}
 	}
 	
-	void format_row(alignment horizontal, unsigned short row_num)
+	void format_row(alignment horizontal, unsigned short row_num, unsigned short row_num_txt)
 	{
-		unsigned short row_num_txt = row_num - 1;
 		unsigned short char_num = 0;
 		unsigned short text_size = NULL;
 		if (this->box_text.printable.size() > row_num_txt )
@@ -147,6 +146,25 @@ struct box_struct
 					this->printable[row_num].append(" ");
 				}
 			}
+			break;
+		case RIGHT:
+			for (size_t i = 0; i < this->width; i++)
+			{
+				if (i == 0 || i == this->width - 1)
+				{
+					this->printable[row_num].append("|");
+				}
+				else if (i < this->width - text_size - 1)
+				{
+					this->printable[row_num].append(" ");
+				}
+				else
+				{
+					this->printable[row_num].push_back(this->box_text.printable[row_num_txt][char_num]);
+					char_num++;
+				}
+			}
+			break;
 		}
 	}
 	void format_box(alignment vertical, alignment horizontal)
@@ -169,7 +187,25 @@ struct box_struct
 			for (int i = 1; i < this->printable.size() - 1; i++)
 			{
 				this->printable[i] = "";
-				this->format_row(horizontal, i);
+				this->format_row(horizontal, i, i - 1);
+			}
+		}
+		else if (vertical == CENTER)
+		{
+			unsigned short top_offset = (this->height - 1 - this->box_text.printable.size()) / 2 + 1;
+			for (int i = top_offset; i < this->printable.size() - 1; i++)
+			{
+				this->printable[i] = "";
+				this->format_row(horizontal, i, i - top_offset);
+			}
+		}
+		else if (vertical == BOTTOM)
+		{
+			unsigned short top_offset = this->height - 1 - this->box_text.printable.size();
+			for (int i = top_offset; i < this->printable.size() - 1; i++)
+			{
+				this->printable[i] = "";
+				this->format_row(horizontal, i, i - top_offset);
 			}
 		}
 	}
@@ -186,9 +222,22 @@ public:
 	~ConState()
 	{
 	}
+
+	void print()
+	{
+		for (auto& printable : printables.first)
+		{
+			printable.second->print();
+		}
+		for (auto& printable : printables.second)
+		{
+			printable.second->print();
+		}
+	}
 	
 protected:
-	box_struct* con_text;
+	//First = string struct, Second = box struct
+	std::pair<std::map<std::string, string_struct*>, std::map<std::string, box_struct*>> printables;
 
 private:
 	
@@ -196,15 +245,11 @@ private:
 };
 
 class MainMenu
-	:ConState
+	:public ConState
 {
 public:
 	MainMenu();
 	~MainMenu();
-	void print()
-	{
-		this->con_text->print();
-	}
 protected:
 
 private:

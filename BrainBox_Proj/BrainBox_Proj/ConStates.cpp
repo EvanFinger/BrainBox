@@ -4,14 +4,25 @@
 
 MainMenu::MainMenu()
 {
-	this->con_text = new box_struct(17, 5);
-	this->con_text->box_text.add_text("Hello World");
-	this->con_text->format_box(TOP, CENTER);
+	this->printables.second["BOX1"] = new box_struct(17, 8);
+	this->printables.second["BOX1"]->box_text.add_text("Hello");
+	this->printables.second["BOX1"]->box_text.add_text("World");
+	this->printables.second["BOX1"]->format_box(BOTTOM, CENTER);
+	this->print();
+	this->printables.second["BOX1"]->box_text.add_text("World");
+	this->print();
+	this->printables.second["BOX1"]->format_box(CENTER, CENTER);
 	
 }
 
 MainMenu::~MainMenu()
 {
-	delete this->con_text;
+	for (auto& printable : printables.first)
+	{
+		delete printable.second;
+	}
+	for (auto& printable : printables.second)
+	{
+		delete printable.second;
+	}
 }
-
