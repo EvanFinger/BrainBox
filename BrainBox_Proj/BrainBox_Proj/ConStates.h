@@ -16,17 +16,7 @@ enum alignment
 struct printable_struct
 {
 	std::vector<std::string> printable;
-	std::map<std::string, std::string> color =
-	{
-		{"RESET", "\033[0m"},
-		{"BLACK", "\033[30m"},
-		{"RED", "\033[31m"},
-		{"GREEN", "\033[32m"},
-		{"YELLOW", "\033[33m"},
-		{"BLUE", "\033[34m"},
-		{"PURPLE", "\033[35m"},
-		{"CYAN", "\033[36m"},
-	};
+	
 
 	printable_struct() {};
 
@@ -212,21 +202,31 @@ struct box_struct
 class ConState
 {
 public:
-	ConState()
+	ConState(std::string working_dir)
 	{
-
+		this->file_mangaer = new FileMan(working_dir);
 	}
 	~ConState()
 	{
+		delete this->file_mangaer;
+		for (auto& printable : printables.first)
+		{
+			delete printable.second;
+		}
+		for (auto& printable : printables.second)
+		{
+			delete printable.second;
+		}
 	}
 
 	void print()
 	{
-		for (auto& printable : printables.first)
+		
+		for (auto& printable : printables.second)
 		{
 			printable.second->print();
 		}
-		for (auto& printable : printables.second)
+		for (auto& printable : printables.first)
 		{
 			printable.second->print();
 		}
@@ -236,6 +236,19 @@ protected:
 	//First = string struct, Second = box struct
 	std::pair<std::map<std::string, string_struct*>, std::map<std::string, box_struct*>> printables;
 
+	FileMan* file_mangaer;
+
+	std::map<std::string, std::string> color =
+	{
+		{"RESET", "\033[0m"},
+		{"BLACK", "\033[30m"},
+		{"RED", "\033[31m"},
+		{"GREEN", "\033[32m"},
+		{"YELLOW", "\033[33m"},
+		{"BLUE", "\033[34m"},
+		{"PURPLE", "\033[35m"},
+		{"CYAN", "\033[36m"},
+	};
 private:
 	
 
@@ -250,6 +263,9 @@ public:
 protected:
 
 private:
+	void initGradeBooksDirectory();
+	void initGreetingDirections();
+	void initGradebookList();
 
 };
 #endif

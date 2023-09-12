@@ -9,6 +9,7 @@
 
 #include <fstream>
 #include <direct.h>
+#include <filesystem>
 
 
 class FileMan
@@ -20,10 +21,11 @@ public:
 	int move(std::string filename);
 	
 	void write(std::string text_to_write);
-	int create_directory(std::string dir_name);
-
 	std::string read();
 
+	std::vector<std::string> read_directory();
+	int create_directory(std::string dir_name);
+	int delete_directory(std::string dir_name);
 protected:
 
 private:
