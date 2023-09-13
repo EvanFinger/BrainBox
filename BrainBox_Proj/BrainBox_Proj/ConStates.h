@@ -310,4 +310,21 @@ private:
 	std::string gradebook_name;
 	void initDirections();
 };
+
+class DeleteExistingGradebook
+	:public ConState
+{
+public:
+	DeleteExistingGradebook(std::stack<ConState*>* console_states);
+	~DeleteExistingGradebook();
+
+	virtual void read_user_input();
+	virtual void refresh_state();
+
+private:
+	std::vector<std::string> gradebookList;
+
+	void initDirections();
+	void initGradebook();
+};
 #endif

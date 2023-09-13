@@ -119,6 +119,7 @@ void MainMenu::createNewGradebook()
 
 void MainMenu::deleteExistingGradebook()
 {
+	this->console_states->push(new DeleteExistingGradebook(this->console_states));
 }
 
 void MainMenu::selectGradebook(std::string dir_path)
@@ -129,7 +130,7 @@ void MainMenu::selectGradebook(std::string dir_path)
 /*
 //////////////////////////////////////////////////////////////////////////////////
 
-		CreateNewGradeBook
+		CreateNewGradeBook (Class)<--(ConState)
 	+ Console state meant for creating new gradebook directories
 	+ INHERITS ConState class
 
@@ -208,4 +209,59 @@ void CreateNewGradeook::initDirections()
 	this->printables.second["BOX1"]->box_text.add_text("|  To CREATE a New Gradebook  |");
 	this->printables.second["BOX1"]->box_text.add_text("V Follow the Directions Below V");
 	this->printables.second["BOX1"]->format_box(CENTER, CENTER);
+}
+
+/*
+//////////////////////////////////////////////////////////////////////////////////
+
+		DeleteExistingGradebook (Class)<--(ConState)
+	+ Console state meant for creating new gradebook directories
+	+ INHERITS ConState class
+
+//////////////////////////////////////////////////////////////////////////////////
+*/
+
+DeleteExistingGradebook::DeleteExistingGradebook(std::stack<ConState*>* console_states)
+	:ConState("grade_books\\", console_states)
+{
+	this->initDirections();
+	this->initGradebook();
+}
+
+DeleteExistingGradebook::~DeleteExistingGradebook()
+{
+}
+
+void DeleteExistingGradebook::read_user_input()
+{
+	std::string input;
+	std::cin>>input;
+}
+
+void DeleteExistingGradebook::refresh_state()
+{
+}
+
+void DeleteExistingGradebook::initDirections()
+{
+	this->printables.second["BOX1"] = new box_struct(60, 6);
+	this->printables.second["BOX1"]->box_text.add_text("|  To DELETE an EXISTING Gradebook  |");
+	this->printables.second["BOX1"]->box_text.add_text("V    Follow the Directions Below    V");
+	this->printables.second["BOX1"]->format_box(CENTER, CENTER);
+}
+
+void DeleteExistingGradebook::initGradebook()
+{
+	this->gradebookList = this->file_mangaer->read_directory();
+	this->printables.first["SS1"] = new string_struct();
+	unsigned short option_label = 0;
+	for (auto& filename : this->gradebookList)
+	{
+		this->printables.first["SS1"]->add_text
+		(
+			this->color["CYAN"] + "[" + std::to_string(option_label) + "] " +
+			filename.substr(12) + this->color["RESET"]
+		);
+		option_label++;
+	}
 }
