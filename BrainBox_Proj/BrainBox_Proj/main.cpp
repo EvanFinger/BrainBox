@@ -1,5 +1,6 @@
 #include "ConStates.h"
 
+
 void init_lib();
 void change_color(WORD color_id);
 
@@ -8,10 +9,17 @@ void change_color(WORD color_id);
 int main()
 {
 	init_lib();
-	MainMenu menu;
-	menu.print();
+	std::stack<ConState*> console_states;
 
-
+	console_states.push(new MainMenu(&console_states));
+	while (console_states.size() > 0)
+	{	
+		console_states.top()->refresh_state();
+		console_states.top()->print();
+		console_states.top()->read_user_input();
+	}
+	
+	
 }
 
 void init_lib()
@@ -54,7 +62,5 @@ void change_color(WORD color_id)
 	SetConsoleTextAttribute(h, color_id);
 }
 
-void start_state()
-{
 
-}
+

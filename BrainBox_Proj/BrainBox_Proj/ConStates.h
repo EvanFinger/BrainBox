@@ -202,8 +202,9 @@ struct box_struct
 class ConState
 {
 public:
-	ConState(std::string working_dir)
+	ConState(std::string working_dir, std::stack<ConState*>* console_states)
 	{
+		this->console_states = console_states;
 		this->file_mangaer = new FileMan(working_dir);
 	}
 	~ConState()
@@ -217,11 +218,15 @@ public:
 		{
 			delete printable.second;
 		}
+		delete this->file_mangaer;
 	}
+
+	virtual void read_user_input() = 0;
+	virtual void refresh_state() = 0;
 
 	void print()
 	{
-		
+		system("cls");
 		for (auto& printable : printables.second)
 		{
 			printable.second->print();
@@ -233,10 +238,14 @@ public:
 	}
 	
 protected:
+	// ptr to console state stack (different screens / menus)
+	std::stack<ConState*>* console_states;
 	//First = string struct, Second = box struct
 	std::pair<std::map<std::string, string_struct*>, std::map<std::string, box_struct*>> printables;
+	
+	
 
-	FileMan* file_mangaer;
+	FileMan* file_mangaer;   
 
 	std::map<std::string, std::string> color =
 	{
@@ -249,6 +258,12 @@ protected:
 		{"PURPLE", "\033[35m"},
 		{"CYAN", "\033[36m"},
 	};
+	
+	void EXIT()
+	{
+		this->console_states->pop();
+	}
+
 private:
 	
 
@@ -258,14 +273,41 @@ class MainMenu
 	:public ConState
 {
 public:
-	MainMenu();
+	MainMenu(std::stack<ConState*>* console_states);
 	~MainMenu();
+
+	virtual void read_user_input();
+	virtual void refresh_state();
 protected:
 
 private:
+	std::vector<std::string> gradebookList;
+
 	void initGradeBooksDirectory();
 	void initGreetingDirections();
 	void initGradebookList();
+	void initMiscOptions();
 
+
+	void createNewGradebook();
+	void deleteExistingGradebook();
+	void selectGradebook(std::string dir_path);
+	
+
+};
+
+class CreateNewGradeook
+	:public ConState
+{
+public:
+	CreateNewGradeook(std::stack<ConState*>* console_states);
+	~CreateNewGradeook();
+
+	virtual void read_user_input();
+	virtual void refresh_state();
+
+private:
+	std::string gradebook_name;
+	void initDirections();
 };
 #endif
