@@ -263,6 +263,7 @@ protected:
 	{
 		std::cout << "---";
 		this->console_states->pop();
+		
 	}
 
 private:

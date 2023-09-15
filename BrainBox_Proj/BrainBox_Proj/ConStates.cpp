@@ -166,14 +166,16 @@ void CreateNewGradeook::read_user_input()
 			this->color["RESET"] << "):  " << 
 			this->color["CYAN"];
 		std::cin >> std::ws;
-		std::getline(std::cin, name);
+		std::getline(std::cin, input);
 		std::cout << this->color["RESET"];
 		if (input == "/x")
 		{
 			this->EXIT();
+			break;
 		}
 		else
 		{
+			name = input;
 			std::cout << "Gradebook Name:  " << this->color["CYAN"] << name << "\n";
 			std::cout << this->color["YELLOW"];
 
@@ -245,6 +247,7 @@ void DeleteExistingGradebook::read_user_input()
 		if (input == "/x")
 		{
 			this->EXIT();
+			break;
 		}
 		else if (stoi(input) < this->gradebookList.size())
 		{
