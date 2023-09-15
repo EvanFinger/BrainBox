@@ -261,6 +261,7 @@ protected:
 	
 	void EXIT()
 	{
+		std::cout << "---";
 		this->console_states->pop();
 	}
 

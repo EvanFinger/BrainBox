@@ -162,13 +162,13 @@ void CreateNewGradeook::read_user_input()
 		std::string input, name;
 
 		std::cout << "Name the Gradebook (" << 
-			this->color["RED"] << "\\x to CANCEL" << 
+			this->color["RED"] << "/x to CANCEL" << 
 			this->color["RESET"] << "):  " << 
 			this->color["CYAN"];
 		std::cin >> std::ws;
 		std::getline(std::cin, name);
 		std::cout << this->color["RESET"];
-		if (input == "\\x")
+		if (input == "/x")
 		{
 			this->EXIT();
 		}
@@ -234,8 +234,55 @@ DeleteExistingGradebook::~DeleteExistingGradebook()
 
 void DeleteExistingGradebook::read_user_input()
 {
-	std::string input;
-	std::cin>>input;
+	while (true)
+	{
+		std::string input;
+		std::cout << "Select a gradebook to delete (" <<
+			this->color["RED"] << "/x to CANCEL" <<
+			this->color["RESET"] << "):  " <<
+			this->color["CYAN"];
+		std::cin>>input;
+		if (input == "/x")
+		{
+			this->EXIT();
+		}
+		else if (stoi(input) < this->gradebookList.size())
+		{
+			int selection = stoi(input);
+
+			std::cout << "Gradebook to Delete:  " << this->color["CYAN"] <<
+				this->gradebookList[selection] << "\n";
+			std::cout << this->color["YELLOW"];
+
+			std::cout << "Correct?" <<
+				this->color["RESET"] << "[" <<
+				this->color["GREEN"] << "Y" <<
+				this->color["RESET"] << "/" <<
+				this->color["RED"] << "N" <<
+				this->color["RESET"] << "]";
+			std::cin >> input;
+			if (input == "Y")
+			{
+				std::string dir_name = this->gradebookList[selection];
+				if (!_rmdir(dir_name.c_str())) {};
+				this->console_states->pop();
+				break;
+			}
+			else if (input == "N")
+			{
+				this->print();
+			}
+			else
+			{
+				this->print();
+				std::cout <<
+					this->color["RED"] <<
+					"Last entry was invalid. Menu has been refreshed." <<
+					this->color["RESET"] <<
+					"\n";
+			}
+		}
+	}
 }
 
 void DeleteExistingGradebook::refresh_state()
